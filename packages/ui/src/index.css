@@ -1,0 +1,704 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   grove design tokens — Tailwind v4 CSS-first config.
+   Every value the UI is allowed to use lives here. Call sites reference tokens
+   (bg-surface, text-fg-dim, rounded-lg, duration-[var(--dur-1)]) and never retype
+   a raw colour or size.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── 4px grid ──────────────────────────────────────────────────────────── */
+  --spacing: 0.25rem; /* p-1=4 p-2=8 p-3=12 p-4=16 p-6=24 p-8=32 */
+
+  /* ── neutral ramp — oklch, hue 165 (faint emerald cast) ────────────────── */
+  --color-well: oklch(0.1 0.004 165); /* recessed — BELOW canvas */
+  --color-canvas: oklch(0.145 0.004 165); /* app background          */
+  --color-surface: oklch(0.182 0.005 165); /* card / panel            */
+  --color-raised: oklch(0.213 0.006 165); /* nested / row hover      */
+  --color-hover: oklch(0.248 0.007 165); /* interactive hover       */
+  --color-active: oklch(0.285 0.008 165); /* pressed / selected      */
+  --color-line: oklch(0.272 0.008 165); /* hairline                */
+  --color-line-strong: oklch(0.345 0.009 165); /* input border            */
+
+  /* text ramp — ratios measured on canvas / surface / raised */
+  --color-fg-faint: oklch(0.6 0.01 165); /* 5.04 / 4.77 / 4.47 */
+  --color-fg-dim: oklch(0.66 0.011 165); /* 6.39 / 6.05 / 5.68 */
+  --color-fg-muted: oklch(0.76 0.01 165); /* 9.25 / 8.76 / 8.22 */
+  --color-fg: oklch(0.885 0.008 165); /* 14.05 /13.29 /12.47 */
+  --color-fg-max: oklch(0.968 0.004 165); /* 18.06 /17.09 /16.04 */
+
+  /* ── semantic accents ──────────────────────────────────────────────────── */
+  --color-accent: oklch(0.7 0.14 160); /* primary solid          */
+  --color-accent-fg: oklch(0.8 0.14 160); /* 11.21:1 text/icon      */
+  --color-on-accent: oklch(0.145 0.004 165); /* ink on solids — 7.88:1 */
+  --color-attn: oklch(0.76 0.16 72); /* NEEDS YOU solid — 8.96 */
+  --color-attn-fg: oklch(0.845 0.13 78); /* 12.15:1                */
+  --color-danger: oklch(0.585 0.2 22);
+  --color-danger-fg: oklch(0.735 0.155 25); /* 7.88:1                 */
+  --color-live: oklch(0.64 0.13 235); /* in-flight              */
+  --color-live-fg: oklch(0.79 0.105 232); /* 10.44:1                */
+  --color-info-fg: oklch(0.775 0.115 300); /* 9.37:1 review/gating   */
+  --color-focus: oklch(0.8 0.14 160);
+
+  /* ── type — 8 steps ────────────────────────────────────────────────────── */
+  --font-sans: ui-sans-serif, -apple-system, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+
+  --text-2xs: 0.625rem; /* 10 */
+  --text-2xs--line-height: 0.875rem; /* 14 */
+  --text-xs: 0.6875rem; /* 11 */
+  --text-xs--line-height: 1rem; /* 16 */
+  --text-sm: 0.75rem; /* 12 */
+  --text-sm--line-height: 1.125rem; /* 18 */
+  --text-base: 0.8125rem; /* 13 */
+  --text-base--line-height: 1.25rem; /* 20 */
+  --text-md: 0.875rem; /* 14 */
+  --text-md--line-height: 1.375rem; /* 22 */
+  --text-lg: 1rem; /* 16 */
+  --text-lg--line-height: 1.5rem; /* 24 */
+  --text-xl: 1.25rem; /* 20 */
+  --text-xl--line-height: 1.75rem; /* 28 */
+  --text-2xl: 1.625rem; /* 26 */
+  --text-2xl--line-height: 2rem; /* 32 */
+
+  --tracking-label: 0.06em; /* uppercase 11px labels only */
+  --tracking-tight: -0.011em; /* >=20px only                */
+
+  /* ── radii — assigned by element height, never by taste ────────────────── */
+  --radius-xs: 3px; /* inline chips/badges, <=20px tall   */
+  --radius-sm: 5px; /* inputs, xs buttons, 24-28px        */
+  --radius-md: 7px; /* buttons, list rows, tiles, 28-40px */
+  --radius-lg: 10px; /* cards, wells, panels               */
+  --radius-xl: 14px; /* shell panes, dropdown, modal       */
+
+  /* ── elevation — fill + hairline + inset highlight ─────────────────────── */
+  --shadow-inset-hi: inset 0 1px 0 0 rgb(255 255 255 / 0.035);
+  --shadow-panel: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-overlay: 0 12px 32px -8px rgb(0 0 0 / 0.7), 0 2px 8px 0 rgb(0 0 0 / 0.4);
+
+  /* ── motion ────────────────────────────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-pop: grove-pop 400ms var(--ease-spring);
+  --animate-enter: grove-enter 160ms var(--ease-out);
+  --animate-attn: grove-attn 2.4s var(--ease-in-out) infinite;
+  --animate-shimmer: grove-shimmer 1.6s linear infinite;
+  --animate-live: grove-live 1.8s var(--ease-in-out) infinite;
+
+  /* ── measure — px, never `ch` (see §1.1: ch overstates by 1.36x here) ───── */
+  --container-measure: 30rem; /* 480px = ~75 characters */
+  --container-wide: 46rem; /* 736px structural content */
+
+  /* ── the ONE responsive switch ─────────────────────────────────────────── */
+  --breakpoint-wide: 1200px; /* active @1440, inactive @1024 */
+
+  /* Not a second design switch — a structural floor. Below this the window can
+     no longer host a thread AND a side column, so the side column overlays
+     (`max-cramped:` variants) instead of squeezing the thread below its own
+     composer width. Nothing about type, density, or spacing changes here. */
+  --breakpoint-cramped: 900px;
+}
+
+/* ── responsive + duration tokens ────────────────────────────────────────────
+   Declared on a plain (unlayered) :root so the media-query override below wins
+   over Tailwind's layered theme output. Redefining a token here re-sizes every
+   consumer with ZERO responsive utilities at the call sites; durations live here
+   too so one reduced-motion block neutralises the whole system. */
+:root {
+  --rail-w: 64px;
+  --page-px: 1rem; /* 16px */
+  --page-py: 1rem;
+  --gutter-w: 0px; /* TaskDetail label gutter — collapsed at 1024 */
+
+  /* The shell's height. `dvh` tracks the *visible* viewport, so a mobile URL bar
+     sliding away doesn't leave the composer under the fold (100vh is the LARGE
+     viewport there and overshoots by the bar's height). `vh` stays the fallback
+     for engines without dynamic units. */
+  --app-h: 100vh;
+
+  /* Side-panel width, clamped to the window: the panel is a fixed-px column, so
+     without the min() it simply hangs off the right edge in a narrow window. The
+     subtrahend is the rail plus both page gutters plus a minimum thread width. */
+  --plan-w-default: min(340px, calc(100vw - var(--rail-w) - 160px));
+
+  --dur-1: 90ms; /* hover / press                      */
+  --dur-2: 160ms; /* enter-exit: dropdown, drawer, row  */
+  --dur-3: 240ms; /* panel collapse, nav bar, disclosure */
+  --dur-4: 400ms; /* attention: count pop               */
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --app-h: 100dvh;
+  }
+}
+
+/* Overlay mode: the panel is over the thread, not beside it, so it only has to
+   clear the rail and one gutter — no thread width to reserve. */
+@media (width <= 900px) {
+  :root {
+    --plan-w-default: min(340px, calc(100vw - var(--rail-w) - 16px));
+  }
+}
+
+@media (width >= 1200px) {
+  :root {
+    --rail-w: 260px;
+    --page-px: 1.5rem; /* 24px */
+    --page-py: 1.25rem; /* 20px */
+    --gutter-w: 7.5rem; /* 120px sticky label gutter appears */
+    --plan-w-default: min(400px, calc(100vw - var(--rail-w) - 200px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 1ms;
+    --dur-2: 1ms;
+    --dur-3: 1ms;
+    --dur-4: 1ms;
+  }
+  /* `!important` is load-bearing here: this block must beat every utility and
+     inline style in the app, which is the whole point of an accessibility
+     escape hatch. */
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: reduced-motion must override everything */
+    animation-duration: 1ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: reduced-motion must override everything */
+    animation-iteration-count: 1 !important;
+    /* biome-ignore lint/complexity/noImportantStyles: reduced-motion must override everything */
+    transition-duration: 1ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: reduced-motion must override everything */
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── utilities ───────────────────────────────────────────────────────────── */
+@utility surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-inset-hi), var(--shadow-panel);
+}
+@utility well {
+  background: var(--color-well);
+  border: 1px solid var(--color-line);
+}
+@utility overlay {
+  background: var(--color-raised);
+  border: 1px solid var(--color-line-strong);
+  box-shadow: var(--shadow-overlay);
+}
+@utility label {
+  font-size: var(--text-xs);
+  line-height: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--color-fg-faint);
+}
+@utility tnum {
+  font-variant-numeric: tabular-nums;
+}
+@utility row-hit {
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+/* The systematic answer to the whole clipping bug class: every scroll pane fades
+   at both edges, so content reads as SCROLLED, not GUILLOTINED. Do not "fix"
+   clipping with per-container padding. */
+@utility scroll-fade-y {
+  overflow-y: auto;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 12px,
+    #000 calc(100% - 12px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 12px,
+    #000 calc(100% - 12px),
+    transparent 100%
+  );
+}
+@utility scroll-fade-x {
+  overflow-x: auto;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 12px,
+    #000 calc(100% - 12px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 12px,
+    #000 calc(100% - 12px),
+    transparent 100%
+  );
+}
+
+/* Native select chrome replaced with a token-coloured inline-SVG chevron. */
+@utility select-chevron {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='%238c9490' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6.5 4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 14px 14px;
+}
+
+/* Shimmering placeholder block — the only "loading" texture in the system. */
+@utility skeleton {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-raised) 0%,
+    var(--color-hover) 50%,
+    var(--color-raised) 100%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+@custom-variant hocus (&:hover, &:focus-visible);
+
+/* ── globals ─────────────────────────────────────────────────────────────── */
+
+/* The page itself must match the app shell — otherwise macOS rubber-band
+   overscroll reveals a white document background behind the dark UI. */
+html,
+body {
+  background-color: var(--color-canvas);
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+  color: var(--color-fg);
+}
+
+/* Every `<select>` loses its raw OS chrome and gains a token-coloured chevron —
+   systematically, so no page can reintroduce the platform dropdown. Lives in
+   @layer base so a call site can still override the padding with a utility. */
+@layer base {
+  select {
+    appearance: none;
+    padding-right: 1.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='%238c9490' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6.5 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 14px 14px;
+  }
+  option {
+    background-color: var(--color-raised);
+    color: var(--color-fg);
+  }
+}
+
+/* One global focus rule — no component can forget it.
+   Deliberately no `border-radius` here: the outline already follows the
+   element's own corner radius, and setting it unlayered would beat every
+   `rounded-*` utility (unlayered always wins over `@layer utilities`),
+   squaring off every focused control. */
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Escape hatch for composite controls — a card that visually *is* the field,
+   with a bare input inside it (the chat composer). The field must not draw its
+   own square outline inside the card's rounded border; the card draws one
+   outline for the pair, so keyboard focus stays just as visible.
+   Unlayered and more specific than the rule above on purpose: `outline-none`
+   at the call site is a layered utility and would silently lose. */
+[data-focus-host] > :is(input, textarea):focus-visible {
+  outline: none;
+}
+[data-focus-host]:has(> :is(input, textarea):focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Subtle, dark-friendly scrollbars so the many scroll panes don't shout. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-line-strong);
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-fg-faint);
+}
+
+/* Scroll without a visible scrollbar — the chat stream auto-scrolls to newest. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── tooltip — CSS only, no dependency ─────────────────────────────────────
+   Carries the labels for the 56px icon rail at 1024, so nothing collapses into
+   an unlabelled glyph. Default side is right; `data-tip-side="bottom"` flips it. */
+[data-tip] {
+  position: relative;
+}
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  z-index: 70;
+  transform: translateY(-50%) translateX(-4px);
+  padding: 0.25rem 0.375rem;
+  border-radius: var(--radius-xs);
+  background: var(--color-raised);
+  border: 1px solid var(--color-line-strong);
+  box-shadow: var(--shadow-overlay);
+  color: var(--color-fg);
+  font-size: var(--text-xs);
+  line-height: 1rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity var(--dur-2) var(--ease-out),
+    transform var(--dur-2) var(--ease-out);
+}
+[data-tip][data-tip-side="bottom"]::after {
+  left: 50%;
+  top: calc(100% + 8px);
+  transform: translateX(-50%) translateY(-4px);
+}
+/* Right-anchored: for controls flush against the window's right edge, where a
+   centred tooltip would hang outside the viewport. */
+[data-tip][data-tip-side="bottom-end"]::after {
+  left: auto;
+  right: 0;
+  top: calc(100% + 8px);
+  transform: translateY(-4px);
+}
+[data-tip]:hover::after,
+[data-tip]:focus-visible::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  transition-delay: 400ms;
+}
+[data-tip][data-tip-side="bottom"]:hover::after,
+[data-tip][data-tip-side="bottom"]:focus-visible::after {
+  transform: translateX(-50%) translateY(0);
+}
+[data-tip][data-tip-side="bottom-end"]:hover::after,
+[data-tip][data-tip-side="bottom-end"]:focus-visible::after {
+  transform: translateY(0);
+}
+/* Tooltips that exist only to carry a label the 56px icon rail hides. Once the
+   label is visible again at >=1200px the tooltip would be pure noise. */
+@media (width >= 1200px) {
+  [data-tip][data-tip-narrow]::after {
+    content: none;
+  }
+}
+
+/* ── keyframes — four loops, each encodes live machine state ─────────────── */
+
+/* Diagonal wave over the 3×3 "grove is working" dot grid. */
+@keyframes grove-dot-wave {
+  0%,
+  60%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes grove-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes grove-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes grove-enter {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes grove-attn {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(238 158 16 / 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgb(238 158 16 / 0.16);
+  }
+}
+
+@keyframes grove-shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes grove-live {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.grove-fade-in {
+  animation: grove-fade-in 0.18s var(--ease-out);
+}
+
+/* The 3×3 working indicator's wave delay is the anti-diagonal (row + col), so
+   it lives here as nth-child rules rather than as an inline style attribute. */
+.grove-dots > span {
+  animation: grove-dot-wave 1.3s var(--ease-in-out) infinite;
+}
+.grove-dots > span:nth-child(1) {
+  animation-delay: 0ms;
+}
+.grove-dots > span:nth-child(2),
+.grove-dots > span:nth-child(4) {
+  animation-delay: 130ms;
+}
+.grove-dots > span:nth-child(3),
+.grove-dots > span:nth-child(5),
+.grove-dots > span:nth-child(7) {
+  animation-delay: 260ms;
+}
+.grove-dots > span:nth-child(6),
+.grove-dots > span:nth-child(8) {
+  animation-delay: 390ms;
+}
+.grove-dots > span:nth-child(9) {
+  animation-delay: 520ms;
+}
+
+/* ── prose ─────────────────────────────────────────────────────────────────
+   A self-contained markdown type system (no @tailwindcss/typography plugin).
+   Font-size is inherited from the caller (callers pass text-md = 14px); this
+   owns rhythm, hierarchy, lists, code, quotes, links and tables. */
+.prose-grove {
+  line-height: 1.65;
+  color: var(--color-fg-muted);
+  overflow-wrap: break-word;
+}
+.prose-grove > :first-child {
+  margin-top: 0;
+}
+.prose-grove > :last-child {
+  margin-bottom: 0;
+}
+.prose-grove p {
+  margin: 0.65em 0;
+  text-wrap: pretty;
+}
+.prose-grove strong {
+  color: var(--color-fg);
+  font-weight: 600;
+}
+.prose-grove em {
+  color: var(--color-fg);
+}
+.prose-grove a {
+  color: var(--color-accent-fg);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklch, var(--color-accent) 40%, transparent);
+  text-underline-offset: 2px;
+  transition: text-decoration-color var(--dur-1) var(--ease-out);
+}
+.prose-grove a:hover {
+  text-decoration-color: var(--color-accent-fg);
+}
+
+/* headings */
+.prose-grove h1,
+.prose-grove h2,
+.prose-grove h3,
+.prose-grove h4 {
+  color: var(--color-fg-max);
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 1.4em 0 0.55em;
+  letter-spacing: -0.01em;
+}
+.prose-grove h1 {
+  font-size: 1.35em;
+}
+.prose-grove h2 {
+  font-size: 1.18em;
+}
+.prose-grove h3 {
+  font-size: 1.04em;
+}
+.prose-grove h4 {
+  font-size: 0.94em;
+  color: var(--color-fg);
+}
+
+/* lists */
+.prose-grove ul,
+.prose-grove ol {
+  margin: 0.65em 0;
+  padding-left: 1.4em;
+}
+/* `.prose-grove li` is kept before the higher-specificity `ul > li` rules so
+   specificity ascends down the file (satisfies noDescendingSpecificity). */
+.prose-grove li {
+  margin: 0.3em 0;
+  text-wrap: pretty;
+}
+.prose-grove li > ul,
+.prose-grove li > ol {
+  margin: 0.3em 0;
+}
+.prose-grove ul {
+  list-style: none;
+}
+.prose-grove ol {
+  list-style: decimal;
+}
+.prose-grove ol > li::marker {
+  color: var(--color-fg-faint);
+  font-variant-numeric: tabular-nums;
+}
+.prose-grove ul > li {
+  position: relative;
+}
+.prose-grove ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.05em;
+  top: 0.72em;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: var(--color-fg-faint);
+}
+
+/* inline + block code.
+   `box-decoration-break: clone` is the highest-value line in this file: without
+   it a wrapped identifier renders as two separately rounded, separately padded
+   pills, so one branch name reads as two tokens. `overflow-wrap: anywhere` lets
+   a long path break at all rather than blowing out the container. */
+.prose-grove code {
+  background: var(--color-raised);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-xs);
+  padding: 0.08em 0.36em;
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--color-fg);
+  overflow-wrap: anywhere;
+  word-break: normal;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.prose-grove pre {
+  margin: 0.8em 0;
+  padding: 0.85rem 1rem;
+  background: var(--color-well);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  line-height: 1.55;
+}
+.prose-grove pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 0.84em;
+  color: var(--color-fg-muted);
+  overflow-wrap: normal;
+  -webkit-box-decoration-break: slice;
+  box-decoration-break: slice;
+}
+
+/* blockquote */
+.prose-grove blockquote {
+  margin: 0.8em 0;
+  padding: 0.1em 0 0.1em 0.95em;
+  border-left: 2px solid color-mix(in oklch, var(--color-accent) 50%, transparent);
+  color: var(--color-fg-dim);
+}
+.prose-grove blockquote p {
+  margin: 0.35em 0;
+}
+
+/* rules + tables */
+.prose-grove hr {
+  margin: 1.3em 0;
+  border: 0;
+  border-top: 1px solid var(--color-line);
+}
+.prose-grove table {
+  width: 100%;
+  margin: 0.8em 0;
+  border-collapse: collapse;
+  font-size: 0.92em;
+  display: block;
+  overflow-x: auto;
+}
+.prose-grove th,
+.prose-grove td {
+  border: 1px solid var(--color-line);
+  padding: 0.4em 0.7em;
+  text-align: left;
+}
+.prose-grove th {
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-weight: 600;
+}

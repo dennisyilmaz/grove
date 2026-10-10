@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Grove",
+  "mainBinaryName": "Grove",
+  "version": "0.1.0",
+  "identifier": "app.grove.desktop",
+  "build": {
+    "frontendDist": "../frontend"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Grove",
+        "width": 1240,
+        "height": 860,
+        "minWidth": 800,
+        "minHeight": 600,
+        "theme": "Dark",
+        "backgroundColor": "#0a0a0a",
+        "hiddenTitle": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": false
+  }
+}

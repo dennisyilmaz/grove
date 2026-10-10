@@ -1,0 +1,25 @@
+{
+  "name": "grove",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@11.5.0",
+  "scripts": {
+    "dev": "tsc -b && concurrently -k -n core,ui \"tsc -b -w --preserveWatchOutput\" \"node --watch --enable-source-maps packages/core/dist/index.js\" \"pnpm --filter @grove/ui dev\"",
+    "build": "tsc -b && pnpm --filter @grove/ui build",
+    "test": "vitest run",
+    "visual": "pnpm --filter @grove/ui visual",
+    "grove-daemon": "node --enable-source-maps packages/core/dist/cli.js",
+    "check": "biome check . && tsc -b && pnpm --filter @grove/ui typecheck",
+    "spike": "tsc -b && node --enable-source-maps packages/core/dist/scripts/spike.js",
+    "sandbox-spike": "tsc -b && node --enable-source-maps packages/core/dist/scripts/sandbox-spike.js"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.2",
+    "concurrently": "^10.0.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
+  }
+}

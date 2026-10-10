@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Grove</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #0a0a0a;
+        color: #d4d4d4;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .wrap {
+        text-align: center;
+      }
+      .logo {
+        color: #34d399;
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      .msg {
+        margin-top: 10px;
+        color: #737373;
+        font-size: 14px;
+      }
+      .spinner {
+        margin: 22px auto 0;
+        width: 26px;
+        height: 26px;
+        border: 3px solid #262626;
+        border-top-color: #34d399;
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .hint {
+        margin-top: 26px;
+        color: #525252;
+        font-size: 12px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="logo">grove</div>
+      <div class="msg">Starting the daemon…</div>
+      <div class="spinner"></div>
+      <div class="hint" id="hint">
+        Taking longer than expected — is Node on PATH and <code>pnpm build</code> run?
+      </div>
+    </div>
+    <script>
+      // The Rust shell navigates this window to the daemon UI once /api/health
+      // is green; this page only has to look calm and surface a hint on stall.
+      setTimeout(() => {
+        document.getElementById("hint").style.display = "block";
+      }, 20000);
+    </script>
+  </body>
+</html>

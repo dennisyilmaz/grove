@@ -1,0 +1,21 @@
+[package]
+name = "grove-desktop"
+version = "0.1.0"
+edition = "2021"
+description = "Grove desktop shell — native window over the local grove daemon"
+
+# macOS shows the process name in the menu bar for dev builds — make it "Grove".
+[[bin]]
+name = "Grove"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+ureq = "2"
+
+[profile.release]
+strip = true
+lto = true

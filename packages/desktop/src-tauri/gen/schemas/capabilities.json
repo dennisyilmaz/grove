@@ -1,0 +1,1 @@
+{"default":{"identifier":"default","description":"Grove shell needs no IPC — the window is the daemon-served web app.","local":true,"windows":["main"],"permissions":["core:default"]}}

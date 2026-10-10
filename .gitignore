@@ -1,0 +1,14 @@
+node_modules/
+dist/
+*.tsbuildinfo
+# Copied out of node_modules by packages/ui/scripts/vendor-runtime.mjs on every
+# build; 4 MB of third-party bundles that already have a home in the lockfile.
+packages/ui/public/vendor/
+coverage/
+.grove/
+# Screenshots the visual gate leaves behind for a human to look at.
+packages/ui/.visual/
+.DS_Store
+*.log
+.env
+target/
